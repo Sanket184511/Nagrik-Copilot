@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Upload, ArrowLeft, Loader } from 'lucide-react'
 import DocumentUpload from '../components/DocumentUpload'
 import DocumentSummary from '../components/DocumentSummary'
+import { DEMO_MODE, delay, mockAnalysis } from '../data/mockData'
 
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'
 
@@ -15,6 +16,12 @@ export default function DocumentSimplifier({ onBack }) {
     setLoading(true)
     setError('')
     try {
+      if (DEMO_MODE) {
+        await delay(2000)
+        setAnalysis(mockAnalysis)
+        setStep('result')
+        return
+      }
       const formData = new FormData()
       formData.append('document', file)
 

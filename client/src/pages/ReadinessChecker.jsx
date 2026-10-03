@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, Loader } from 'lucide-react'
 import DocumentUpload from '../components/DocumentUpload'
 import ReadinessReport from '../components/ReadinessReport'
+import { DEMO_MODE, delay, mockReadiness, mockUploadedFiles } from '../data/mockData'
 
 export default function ReadinessChecker({ onBack }) {
   const [step, setStep] = useState('upload') // 'upload' or 'processing' or 'result'
@@ -12,6 +13,12 @@ export default function ReadinessChecker({ onBack }) {
   const handleUpload = async (file) => {
     setLoading(true)
     try {
+      if (DEMO_MODE) {
+        await delay(800)
+        const next = mockUploadedFiles[uploadedFiles.length]
+        setUploadedFiles([...uploadedFiles, next ? { ...next, name: file.name } : { id: `demo-${Date.now()}`, name: file.name }])
+        return
+      }
       const formData = new FormData()
       formData.append('document', file)
 
@@ -35,6 +42,12 @@ export default function ReadinessChecker({ onBack }) {
   const handleCheckReadiness = async () => {
     setLoading(true)
     try {
+      if (DEMO_MODE) {
+        await delay(2500)
+        setReadiness(mockReadiness)
+        setStep('result')
+        return
+      }
       const requirements = [
         { id: '1', name: 'Identity Proof' },
         { id: '2', name: 'Income Certificate' },
