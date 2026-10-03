@@ -27,6 +27,7 @@ export default function DocumentUpload({ onUpload, loading, multiple = false }) 
 
   const handleChange = (e) => {
     const files = e.target.files
+    console.log('FILE SELECTED:', files[0], 'onUpload is', typeof onUpload, 'loading:', loading)
     if (files && files[0]) {
       onUpload(files[0])
     }
